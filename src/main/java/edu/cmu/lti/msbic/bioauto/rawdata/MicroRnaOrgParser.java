@@ -40,7 +40,7 @@ public class MicroRnaOrgParser {
      */
     public static void main(String[] args) throws Exception {
 	// TODO Auto-generated method stub
-	String filename = "C:\\Users\\Hank\\Desktop\\human_predictions_S_C_aug2010\\hg19_predictions_S_C_aug2010.txt";
+	String filename = "";
 	MicroRnaOrgParser parser = new MicroRnaOrgParser(new File(filename));
 	parser.parse();
     }
