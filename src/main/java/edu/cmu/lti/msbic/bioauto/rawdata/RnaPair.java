@@ -8,10 +8,12 @@ public class RnaPair {
     private String miRna;
     private String gene;
     private List<String> pairs;
+    private int label;
 
-    public RnaPair(String miRna, String gene) {
+    public RnaPair(String miRna, String gene, int label) {
 	this.miRna = miRna;
 	this.gene = gene;
+	this.label = label;
 	pairs = new ArrayList<String>();
     }
 
@@ -39,4 +41,7 @@ public class RnaPair {
 	return builder.toString();
     }
 
+    public int getLabel() {
+        return label;
+    }
 }
