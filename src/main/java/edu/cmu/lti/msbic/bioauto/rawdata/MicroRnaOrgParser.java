@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -18,11 +19,13 @@ public class MicroRnaOrgParser {
     private File microRnaOrgFile;
     private Map<String, Set<String>> validatedPairs;
     private Map<String, List<RnaPair>> pairs;
+    private Map<String, Set<String>> dictionary;
     
     public MicroRnaOrgParser(File microRnaOrgFile, Map<String, Set<String>> validatedPairs) {
 	this.microRnaOrgFile = microRnaOrgFile;
 	this.validatedPairs = validatedPairs;
 	pairs = new HashMap<String, List<RnaPair>>();
+	dictionary = new HashMap<String, Set<String>>();
     }
     
     public void parse() throws FileNotFoundException, UnequalLengthException {
@@ -45,14 +48,31 @@ public class MicroRnaOrgParser {
 		RnaPair pair = new RnaPair(miRna, gene, label);
 		pair.createPairs(miRnaSequence, alignment, mRnaSequence);
 		
+		// Add RNA Pair
 		List<RnaPair> rnaPairs = pairs.get(miRna);
 		if (rnaPairs == null) {
 		    rnaPairs = new ArrayList<RnaPair>();
 		    pairs.put(miRna, rnaPairs);
 		}
 		rnaPairs.add(pair);
+		
+		// Add all pairs to vocab list
+		Set<String> pairsList = dictionary.get(miRna);
+		if (pairsList == null) {
+		    pairsList = new HashSet<String>();
+		    dictionary.put(miRna, pairsList);
+		}
+		pairsList.addAll(pair.getPairs());
 	    }
 	}
 	scanner.close();
     }
+
+    public Map<String, Set<String>> getDictionary() {
+        return dictionary;
+    }
+
+    public Map<String, List<RnaPair>> getPairs() {
+        return pairs;
+    }   
 }

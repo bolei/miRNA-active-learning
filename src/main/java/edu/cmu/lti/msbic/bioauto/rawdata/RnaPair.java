@@ -44,4 +44,8 @@ public class RnaPair {
     public int getLabel() {
         return label;
     }
+
+    public List<String> getPairs() {
+        return pairs;
+    }
 }

@@ -31,9 +31,8 @@ public class RunParsing {
 	}
 	
 	String filename = prop.getProperty("sequence_file");
-	MicroRnaOrgParser parser = new MicroRnaOrgParser(new File(filename), validatedPairs);
-	parser.parse();
-
+	MicroRnaOrgParser microRnaOrgParser = new MicroRnaOrgParser(new File(filename), validatedPairs);
+	microRnaOrgParser.parse();
     }
 
 }
