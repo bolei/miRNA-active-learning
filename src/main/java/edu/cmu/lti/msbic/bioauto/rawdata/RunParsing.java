@@ -3,6 +3,7 @@ package edu.cmu.lti.msbic.bioauto.rawdata;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -19,10 +20,12 @@ public class RunParsing {
 	prop.load(MicroRnaOrgParser.class.getResourceAsStream("/parser.properties"));
 	
 	// Load validated pairs
+	System.out.println("Loading validated pairs");
 	Map<String, Set<String>> validatedPairs = new HashMap<String, Set<String>>();
 	String targetsFolderName = prop.getProperty("validated_targets_location");
 	File targetsFolder = new File(targetsFolderName);
 	for (File targetFile : targetsFolder.listFiles()) {
+	    System.out.println("Parsing " + targetFile.getName());
 	    String name = targetFile.getName();
 	    int extensionLoc = name.indexOf(".");
 	    String miRna = name.substring(0, extensionLoc);
@@ -30,9 +33,23 @@ public class RunParsing {
 	    validatedPairs.put(miRna, validatedtargetsParser.parse());
 	}
 	
-	String filename = prop.getProperty("sequence_file");
-	MicroRnaOrgParser microRnaOrgParser = new MicroRnaOrgParser(new File(filename), validatedPairs);
+	// Parse sequence file
+	System.out.println("Parsing sequence file");
+	String sequenceFile = prop.getProperty("sequence_file");
+	MicroRnaOrgParser microRnaOrgParser = new MicroRnaOrgParser(new File(sequenceFile), validatedPairs);
 	microRnaOrgParser.parse();
+	Map<String, List<MiRnaGenePair>> miRnaGenePairs = microRnaOrgParser.getMiRnaGenePairs();
+	Map<String, Set<String>> dictionaries = microRnaOrgParser.getDictionaries();
+	
+	// Aggregate files
+	System.out.println("Aggregating files");
+	String featuresFile = prop.getProperty("features_file");
+	String dictionaryFile = prop.getProperty("dictionary_file");
+	String miRnaGeneIdsFile = prop.getProperty("mirna_gene_ids_file");
+	Aggregator aggregator = Aggregator.aggregate(dictionaries);
+	aggregator.createFeaturesFile(new File(featuresFile), miRnaGenePairs);
+	aggregator.writeDictionaryFile(new File(dictionaryFile));
+	aggregator.writeMiRnaGeneIdsFile(new File(miRnaGeneIdsFile));
     }
 
 }

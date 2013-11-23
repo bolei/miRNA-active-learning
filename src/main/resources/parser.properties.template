@@ -1,2 +1,5 @@
 sequence_file=path_to_seq_file
 validated_targets_location=path_to_validated_targets_folder
+features_file=path_to_features_file
+dictionary_file=path_to_dictionary_file
+mirna_gene_ids_file=path_to_mirna_gene_ids_file
