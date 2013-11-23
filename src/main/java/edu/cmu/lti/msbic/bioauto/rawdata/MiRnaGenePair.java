@@ -3,14 +3,14 @@ package edu.cmu.lti.msbic.bioauto.rawdata;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RnaPair {
+public class MiRnaGenePair {
 
     private String miRna;
     private String gene;
     private List<String> pairs;
     private int label;
 
-    public RnaPair(String miRna, String gene, int label) {
+    public MiRnaGenePair(String miRna, String gene, int label) {
 	this.miRna = miRna;
 	this.gene = gene;
 	this.label = label;
@@ -39,6 +39,14 @@ public class RnaPair {
 	    builder.append("\n");
 	}
 	return builder.toString();
+    }
+
+    public String getMiRna() {
+        return miRna;
+    }
+
+    public String getGene() {
+        return gene;
     }
 
     public int getLabel() {

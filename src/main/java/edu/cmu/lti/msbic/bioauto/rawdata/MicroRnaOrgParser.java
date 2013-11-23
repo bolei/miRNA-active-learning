@@ -18,13 +18,13 @@ public class MicroRnaOrgParser {
 
     private File microRnaOrgFile;
     private Map<String, Set<String>> validatedPairs;
-    private Map<String, List<RnaPair>> pairs;
+    private Map<String, List<MiRnaGenePair>> miRnaGenePairs;
     private Map<String, Set<String>> dictionary;
     
     public MicroRnaOrgParser(File microRnaOrgFile, Map<String, Set<String>> validatedPairs) {
 	this.microRnaOrgFile = microRnaOrgFile;
 	this.validatedPairs = validatedPairs;
-	pairs = new HashMap<String, List<RnaPair>>();
+	miRnaGenePairs = new HashMap<String, List<MiRnaGenePair>>();
 	dictionary = new HashMap<String, Set<String>>();
     }
     
@@ -45,14 +45,14 @@ public class MicroRnaOrgParser {
 		if (genes.contains(gene)) {
 		    label = 1;
 		}
-		RnaPair pair = new RnaPair(miRna, gene, label);
+		MiRnaGenePair pair = new MiRnaGenePair(miRna, gene, label);
 		pair.createPairs(miRnaSequence, alignment, mRnaSequence);
 		
 		// Add RNA Pair
-		List<RnaPair> rnaPairs = pairs.get(miRna);
+		List<MiRnaGenePair> rnaPairs = miRnaGenePairs.get(miRna);
 		if (rnaPairs == null) {
-		    rnaPairs = new ArrayList<RnaPair>();
-		    pairs.put(miRna, rnaPairs);
+		    rnaPairs = new ArrayList<MiRnaGenePair>();
+		    miRnaGenePairs.put(miRna, rnaPairs);
 		}
 		rnaPairs.add(pair);
 		
@@ -72,7 +72,7 @@ public class MicroRnaOrgParser {
         return dictionary;
     }
 
-    public Map<String, List<RnaPair>> getPairs() {
-        return pairs;
+    public Map<String, List<MiRnaGenePair>> getPairs() {
+        return miRnaGenePairs;
     }   
 }
