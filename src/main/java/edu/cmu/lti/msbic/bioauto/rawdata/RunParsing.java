@@ -43,11 +43,11 @@ public class RunParsing {
 	
 	// Aggregate files
 	System.out.println("Aggregating files");
-	String featuresFile = prop.getProperty("features_file");
+	String formattedDataFile = prop.getProperty("formatted_data_file");
 	String dictionaryFile = prop.getProperty("dictionary_file");
 	String miRnaGeneIdsFile = prop.getProperty("mirna_gene_ids_file");
 	Aggregator aggregator = Aggregator.aggregate(dictionaries);
-	aggregator.createFeaturesFile(new File(featuresFile), miRnaGenePairs);
+	aggregator.createFormattedDataFile(new File(formattedDataFile), miRnaGenePairs);
 	aggregator.writeDictionaryFile(new File(dictionaryFile));
 	aggregator.writeMiRnaGeneIdsFile(new File(miRnaGeneIdsFile));
     }
