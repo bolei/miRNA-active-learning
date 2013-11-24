@@ -37,10 +37,10 @@ public class Aggregator {
 	return aggregator;
     }
     
-    public void createFeaturesFile(File featuresFile, Map<String, List<MiRnaGenePair>> pairs) {
+    public void createFormattedDataFile(File formattedDataFile, Map<String, List<MiRnaGenePair>> pairs) {
 	BufferedOutputStream os = null;
 	try {
-	    os = new BufferedOutputStream(new FileOutputStream(featuresFile));
+	    os = new BufferedOutputStream(new FileOutputStream(formattedDataFile));
 	    os.write("Label,miRnaGeneId,Features\n".getBytes());
 	    int miRnaGeneId = 1;
 	    Iterator<String> iter = pairs.keySet().iterator();
