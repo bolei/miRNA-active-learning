@@ -12,11 +12,11 @@ import java.util.Map;
 import java.util.Set;
 
 public class Aggregator {
-    private Map<String, Integer> miRnaGeneIds;
+    private Map<Integer, String> miRnaGeneIds;
     private Map<String, Integer> dictionary;
     
     private Aggregator() {
-	this.miRnaGeneIds = new HashMap<String, Integer>();
+	this.miRnaGeneIds = new HashMap<Integer, String>();
 	this.dictionary = new HashMap<String, Integer>();
     }
     
@@ -42,17 +42,17 @@ public class Aggregator {
 	try {
 	    os = new BufferedOutputStream(new FileOutputStream(featuresFile));
 	    os.write("Label,miRnaGeneId,Features\n".getBytes());
+	    int miRnaGeneId = 1;
 	    Iterator<String> iter = pairs.keySet().iterator();
 	    while (iter.hasNext()) {
 		String miRna = iter.next();
 		List<MiRnaGenePair> miRnaGenePairs = pairs.get(miRna);
 		for (MiRnaGenePair miRnaGenePair : miRnaGenePairs) {
 		    String miRnaGene = miRna + ":" + miRnaGenePair.getGene();
-		    Integer miRnaGeneId = new Integer(miRnaGeneIds.size() + 1);
-		    miRnaGeneIds.put(miRnaGene, miRnaGeneId);
+		    miRnaGeneIds.put(miRnaGeneId, miRnaGene);
 		    
 		    // Write miRna Gene Pair to output file
-		    os.write(String.format("%d,%d", miRnaGenePair.getLabel(), miRnaGeneId).getBytes());
+		    os.write(String.format("%d,%d", miRnaGenePair.getLabel(), miRnaGeneId++).getBytes());
 		    for (String pair : miRnaGenePair.getPairs()) {
 			os.write(",".getBytes());
 			os.write(dictionary.get(pair).toString().getBytes());
@@ -81,10 +81,10 @@ public class Aggregator {
 	BufferedOutputStream os = null;
 	try {
 	    os = new BufferedOutputStream(new FileOutputStream(miRnaGeneIdsFile));
-	    Iterator<String> iter = miRnaGeneIds.keySet().iterator();
+	    Iterator<Integer> iter = miRnaGeneIds.keySet().iterator();
 	    while (iter.hasNext()) {
-		String miRnaGene = iter.next();
-		Integer id = miRnaGeneIds.get(miRnaGene);
+		Integer id = iter.next();
+		String miRnaGene = miRnaGeneIds.get(id);
 		os.write(String.format("%s,%d\n", miRnaGene, id).getBytes());
 	    }
 	} catch (FileNotFoundException e) {
