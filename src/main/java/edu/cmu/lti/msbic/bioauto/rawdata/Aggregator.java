@@ -53,10 +53,23 @@ public class Aggregator {
 		    
 		    // Write miRna Gene Pair to output file
 		    os.write(String.format("%d,%d", miRnaGenePair.getLabel(), miRnaGeneId++).getBytes());
-		    for (String pair : miRnaGenePair.getPairs()) {
-			os.write(",".getBytes());
-			os.write(dictionary.get(pair).toString().getBytes());
+		    List<String> pair = miRnaGenePair.getPairs();
+		    for (int i = 0; i < 8; i++) {
+			int feature = dictionary.get(pair.get(i));
+			for (int j = 0; j < dictionary.size(); j++) {
+			    os.write(",".getBytes());
+			    int val = 0;
+			    if (feature == j) {
+				val = 1;
+			    }
+			    os.write(Integer.toString(val).getBytes());
+			}
 		    }
+//		    for (String pair : miRnaGenePair.getPairs()) {
+//			os.write(",".getBytes());
+//			
+//			os.write(dictionary.get(pair).toString().getBytes());
+//		    }
 		    os.write("\n".getBytes());
 		}
 		
