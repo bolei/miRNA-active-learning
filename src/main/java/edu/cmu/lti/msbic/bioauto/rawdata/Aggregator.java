@@ -59,17 +59,12 @@ public class Aggregator {
 			for (int j = 0; j < dictionary.size(); j++) {
 			    os.write(",".getBytes());
 			    int val = 0;
-			    if (feature == j) {
+			    if (feature == (j+1)) {
 				val = 1;
 			    }
 			    os.write(Integer.toString(val).getBytes());
 			}
 		    }
-//		    for (String pair : miRnaGenePair.getPairs()) {
-//			os.write(",".getBytes());
-//			
-//			os.write(dictionary.get(pair).toString().getBytes());
-//		    }
 		    os.write("\n".getBytes());
 		}
 		
@@ -140,5 +135,9 @@ public class Aggregator {
 		os = null;
 	    }
 	}
+    }
+    
+    public int getDictionarySize() {
+	return dictionary.size();
     }
 }
