@@ -5,19 +5,26 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 public class Aggregator {
     private Map<Integer, String> miRnaGeneIds;
     private Map<String, Integer> dictionary;
+    private List<String> dictionaryKeys;
+    private Random rand;
     
     private Aggregator() {
 	this.miRnaGeneIds = new HashMap<Integer, String>();
 	this.dictionary = new HashMap<String, Integer>();
+	dictionaryKeys = new ArrayList<String>();
+	rand = new Random(Calendar.getInstance().getTimeInMillis());
     }
     
     public static Aggregator aggregate(Map<String, Set<String>> dictionaries) {
@@ -34,6 +41,7 @@ public class Aggregator {
 		}
 	    }
 	}
+	aggregator.dictionaryKeys.addAll(aggregator.dictionary.keySet());
 	return aggregator;
     }
     
@@ -54,6 +62,12 @@ public class Aggregator {
 		    // Write miRna Gene Pair to output file
 		    os.write(String.format("%d,%d", miRnaGenePair.getLabel(), miRnaGeneId++).getBytes());
 		    List<String> pair = miRnaGenePair.getPairs();
+		    
+		    // Negative pair, so need to create true negative by removing positive binding
+		    if (miRnaGenePair.getLabel() == 0) {
+			createNegativePair(pair);
+		    }
+		    
 		    for (int i = 0; i < 8; i++) {
 			int feature = dictionary.get(pair.get(i));
 			for (int j = 0; j < dictionary.size(); j++) {
@@ -81,6 +95,35 @@ public class Aggregator {
 		    e.printStackTrace();
 		}
 		os = null;
+	    }
+	}
+    }
+    
+    private void createNegativePair(List<String> pair) {
+	List<Integer> positiveBindPosition = new ArrayList<Integer>();
+	// Get locations of positive bind positions
+	for (int i = 0; i < 8; i++) {
+	    if (pair.get(i).contains("|")) {
+		positiveBindPosition.add(i);
+	    }
+	}
+	
+	// No positive binding positions then can return
+	if (positiveBindPosition.size() < 1) {
+	    return;
+	}
+	
+	// Randomly select a positive bind pair
+	int positivePosition = rand.nextInt(positiveBindPosition.size());
+	
+	// Randomly change positive bind pair
+	boolean done = false;
+	while (!done) {
+	    int negativePosition = rand.nextInt(dictionaryKeys.size());
+	    if (!dictionaryKeys.get(negativePosition).contains("|")) {
+		int position = positiveBindPosition.get(positivePosition);
+		pair.set(position, dictionaryKeys.get(negativePosition));
+		done = true;
 	    }
 	}
     }

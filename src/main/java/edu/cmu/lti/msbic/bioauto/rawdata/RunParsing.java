@@ -51,11 +51,11 @@ public class RunParsing {
 	aggregator.writeDictionaryFile(new File(dictionaryFile));
 	aggregator.writeMiRnaGeneIdsFile(new File(miRnaGeneIdsFile));
 	
-	// Negative pairs file
-	System.out.println("Creating negative pairs file");
-	String negativePairsFile = prop.getProperty("negative_pairs_file");
-	NegativePairCreator negativePairCreator = new NegativePairCreator(aggregator.getDictionarySize());
-	negativePairCreator.createNegativePairsFile(new File(negativePairsFile), 3000);
+//	// Negative pairs file
+//	System.out.println("Creating negative pairs file");
+//	String negativePairsFile = prop.getProperty("negative_pairs_file");
+//	NegativePairCreator negativePairCreator = new NegativePairCreator(aggregator.getDictionarySize());
+//	negativePairCreator.createNegativePairsFile(new File(negativePairsFile), 3000);
     }
 
 }
