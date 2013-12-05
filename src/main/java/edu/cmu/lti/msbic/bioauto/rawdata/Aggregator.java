@@ -69,15 +69,19 @@ public class Aggregator {
 		    }
 		    
 		    for (int i = 0; i < 8; i++) {
-			int feature = dictionary.get(pair.get(i));
-			for (int j = 0; j < dictionary.size(); j++) {
-			    os.write(",".getBytes());
-			    int val = 0;
-			    if (feature == (j+1)) {
-				val = 1;
-			    }
-			    os.write(Integer.toString(val).getBytes());
-			}
+//			int feature = dictionary.get(pair.get(i));
+//			for (int j = 0; j < dictionary.size(); j++) {
+//			    os.write(",".getBytes());
+//			    int val = 0;
+//			    if (feature == (j+1)) {
+//				val = 1;
+//			    }
+//			    os.write(Integer.toString(val).getBytes());
+//			}
+		    }
+		    for (int i = 0; i < pair.size(); i++) {
+			os.write(",".getBytes());
+			os.write(dictionary.get(pair.get(i)).toString().getBytes());
 		    }
 		    os.write("\n".getBytes());
 		}
@@ -113,17 +117,14 @@ public class Aggregator {
 	    return;
 	}
 	
-	// Randomly select a positive bind pair
-	int positivePosition = rand.nextInt(positiveBindPosition.size());
-	
 	// Randomly change positive bind pair
-	boolean done = false;
-	while (!done) {
+	int i = 0;
+	while (i < positiveBindPosition.size()) {
 	    int negativePosition = rand.nextInt(dictionaryKeys.size());
 	    if (!dictionaryKeys.get(negativePosition).contains("|")) {
-		int position = positiveBindPosition.get(positivePosition);
+		int position = positiveBindPosition.get(i);
 		pair.set(position, dictionaryKeys.get(negativePosition));
-		done = true;
+		i++;
 	    }
 	}
     }
